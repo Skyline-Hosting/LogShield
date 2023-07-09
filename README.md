@@ -1,6 +1,12 @@
 # LogShield
 
-LogShield is a machine learning project that uses TensorFlow.js to detect malicious activity in web server access logs. It can be used to protect your web server from malitious users.
+LogShield is a comprehensive machine learning project that leverages the powerful TensorFlow.js to monitor and detect malicious activity in both web server access and login logs. This robust system offers a safeguard for your server, detecting and flagging suspicious behaviors to help protect against potential security breaches.
+
+Powered by an intricate Recurrent Neural Network (RNN) model, LogShield specializes in sequential data understanding. This allows it to comprehend the temporal dependencies in the logs and accurately identify patterns of harmful activity. This approach is especially effective for login logs, where the sequence of attempts may indicate harmful intent.
+
+By incorporating a machine learning model, LogShield goes beyond traditional rule-based systems to offer dynamic and adaptable protection. It is designed to learn and improve over time, refining its ability to discern legitimate from malicious activity, and delivering a progressively robust defense for your web server.
+
+Whether it's protection from Distributed Denial of Service (DDoS) attacks, brute-force login attempts, or other types of malicious activity, LogShield offers a state-of-the-art, machine learning-powered solution to bolster the security of your web server.
 
 <p align="center">
     <img src="./display.png">
@@ -64,52 +70,15 @@ The following environment variables are used in the application:
 | Reset_Interval      | Request rate limiter reset interval (Per 1 min)   | 1                                       |
 | BlockDuration       | Duration to block IP for rate limiting (Per 1 min) | 2                                      |
 
-
-# AI:
-
-LogShield uses a neural network model to analyze access logs and predict whether each user is malicious or legitimate based on their IP address, request method, response status code, and bytes sent. The model is trained on a combination of legitimate and malicious access logs, and can be retrained on new data to improve its accuracy.
-
-To use LogShield, you need to prepare your access logs in a specific format and train the model on them. Then, you can use the trained model to analyze new access logs and detect any malicious activity.
-
-## How to use it
-
-To use LogShield, follow these steps:
-
-1. Prepare your access logs in the following format:
-
-```sql
-IP_ADDRESS - - [TIMESTAMP] "METHOD URI PROTOCOL" STATUS_CODE BYTES_SENT "REFERER" "USER_AGENT"
-```
-
-For example:
-
-```sql
-192.168.1.1 - - [23/Apr/2023:12:34:56 +0000] "GET /index.html HTTP/1.1" 200 1024 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36"
-```
-
-2. Generate some malicious access logs and combine them with your legitimate access logs. You can use the accessmal.log file provided in this project as an example of malicious logs.
-
-3. Install Node.js and the required packages by running the following command in your terminal:
+1. Install Node.js and the required packages by running the following command in your terminal:
 
 ```
 npm i
 ```
-
-4. Train the model by running the following command:
-
+2. Start the script:
 ```
-node index.js
+npm start
 ```
-
-This will train the model on your combined access logs and save the trained model to a file called model.json.
-
-5. Once the model is trained, you can use it to analyze new access logs and detect malicious activity by running the following command:
-
-```
-npm run evaluate
-```
-
-This will load the trained model from the model.json file and analyze the access logs in the access.log file. If any malicious activity is detected, the script will output the IP addresses of the malicious users.
 
 ## Installing
 
@@ -138,7 +107,3 @@ cp logshield.service /etc/systemd/system/logshield.service
 systemctl daemon-reload
 systemctl restart logshield
 ```
-
-## Conclusion
-
-LogShield is a powerful tool for protecting your web server from DDoS attacks. By using machine learning to analyze access logs, it can accurately detect malicious activity and allow you to take action before any damage is done.

@@ -124,3 +124,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# dotenv environment variable file
+.env
+plugin/DISCORD/config.json

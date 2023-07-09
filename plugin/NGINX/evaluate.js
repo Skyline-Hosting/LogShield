@@ -2,11 +2,11 @@ const tf = require('@tensorflow/tfjs-node');
 const fs = require('fs');
 
 async function loadModel() {
-    const model = await tf.loadLayersModel('file://./NGINX/model/model.json');
+    const model = await tf.loadLayersModel('file://./plugin/NGINX/model/model.json');
     return model;
 }
 
-const accessLogData = fs.readFileSync('./NGINX/Train/test/access.log', 'utf8');
+const accessLogData = fs.readFileSync('./plugin/NGINX/Train/test/access.log', 'utf8');
 
 function parseNginxLogs(logData) {
     const logs = logData.split('\n');
@@ -57,15 +57,27 @@ async function evaluateAccessLog() {
     // Predict malicious users
     const predictions = model.predict(normalizedDataset);
     const threshold = 0.8;
-    const maliciousUsers = [];
+    const suspiciousIPs = [];
 
     predictions.dataSync().forEach((prediction, index) => {
         if (prediction >= threshold) {
-            maliciousUsers.push(parsedLogs[index]);
+            if (suspiciousIPs.includes(parsedLogs[index].ip)) return;
+            suspiciousIPs.push(parsedLogs[index].ip);
         }
-    });
+    })
+        const seeds = [];
+        seeds.push({
+            prediction: (predictions.dataSync()[0] * 100).toFixed(2) + "%",
+            seed: Math.floor(Math.random() * 1000),
+            seedLength: 21,
+            modelLayers: model.layers.map(layer => ({
+                name: layer.name,
+                type: layer.getClassName(),
+                config: layer.getConfig()
+            })),
+        });
 
-    return maliciousUsers;
+        return { suspiciousIPs, seeds };
 }
 
 module.exports = evaluateAccessLog;
